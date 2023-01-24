@@ -1,5 +1,7 @@
 # Разработай свою игру в этом файле!
 import pygame as pg
+import time
+import random
 
 
 class GameSprite(pg.sprite.Sprite):
@@ -31,8 +33,6 @@ class Player(GameSprite):
         screen.blit(photo, (self.rect.x, self.rect.y))
 
     def update(self):
-        global player
-        
         player.rect.x += self.x_change
         platform_touches = pg.sprite.spritecollide(player, barries, False)
         
@@ -52,6 +52,29 @@ class Player(GameSprite):
             for p in platform_touches:
                 self.rect.top = p.rect.bottom
 
+class Enemy(GameSprite):
+    def __init__(self, pic, w, h, x, y, speed, x2y2):
+        self.speed = speed
+        self.image = pic
+        self.x1y1 = (x, y)
+        self.x2y2 = x2y2
+        self.direction = 'right'
+        super().__init__(pic, w, h, x, y)
+    def ris(self):
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+    def update(self):
+        if self.direction == "right":
+            if self.rect.x < self.x2y2[0] and not self.rect.x == self.x2y2[0]:
+                self.rect.x += self.speed
+            else:
+                self.direction = "left"
+        if self.direction == "left":
+            if self.rect.x > self.x1y1[0] and not self.rect.x == self.x1y1[0]:
+                self.rect.x -= self.speed
+            else:
+                self.direction = "right"
+        
+
 #lib
 WHITE = (250, 250, 250)
 
@@ -63,6 +86,11 @@ bg = GameSprite("floor.jpg", 1300, 800, 0, 0)
 player = Player("player.png", 100, 100, 450, 700)
 End = GameSprite("finish.png", 100, 100, 1100, 700)
 wall_picture = 'wall.jpg'
+skrimer = GameSprite("skrimer.jpg", 1300, 800, 0, 0)
+win = GameSprite("win.jpg", 1300, 800, 0, 0)
+enemys = [
+    Enemy("enemy.png", 100, 100, 700, 700, 5, (900, 700))
+]
 walls = [GameSprite(wall_picture, 30, 700, 600, 600),
     GameSprite(wall_picture, 700, 30, 200, 600),
     GameSprite(wall_picture, 500, 30, 0, 400),
@@ -108,6 +136,25 @@ while play:
 
     End.ris()
     player.ris()
+    if finish:
+        if random.random() > 0.7:
+            kon = skrimer
+        else:
+            kon = win
+        while finish:
+            kon.ris()
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    finish = False
+                    play = False
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_SPACE:
+                        finish = False
+            pg.display.flip()
+        player = Player("player.png", 100, 100, 450, 700)
+    for enemy in enemys:
+        enemy.ris()
+        enemy.update()
 
 
 
@@ -124,6 +171,8 @@ while play:
                 player.x_change = 5
             if event.key == pg.K_a:
                 player.x_change = -5
+            if event.key == pg.K_SPACE and finish:
+                finish = False
 
         if event.type == pg.KEYUP:
             if event.key == pg.K_w or pg.K_s:
