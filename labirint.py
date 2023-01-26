@@ -3,6 +3,49 @@ import pygame as pg
 import time
 import random
 
+def check_finish():
+    global play
+    global finish
+    global player
+    if finish:
+        pg.mixer.music.stop()
+        if random.random() > 0.7:
+            kon = skrimer
+            sd_skrimer.play()
+        else:
+            kon = win
+            sd_win.play()
+        while finish:
+            kon.ris()
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    finish = False
+                    play = False
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_SPACE:
+                        finish = False
+            pg.display.flip()
+        player = Player("player.png", 100, 100, 450, 700)
+        pg.mixer.music.play()
+
+def check_die():
+    global die
+    global play
+    global player
+    if die:
+        pg.mixer.music.stop()
+        while die:
+            DIE.ris()
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    play = False
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_SPACE:
+                        die = False
+            pg.display.flip()
+        player = Player("player.png", 100, 100, 450, 700)
+        pg.mixer.music.play()
+
 
 class GameSprite(pg.sprite.Sprite):
     def __init__(self, pic, w, h, x, y):
@@ -74,17 +117,30 @@ class Enemy(GameSprite):
             else:
                 self.direction = "right"
         
+        if pg.sprite.collide_rect(player, self):
+            global die
+            global sd_die
+            die = True
+            sd_die.play()
+        
 
 #lib
-WHITE = (250, 250, 250)
 
 pg.init()
+
+pg.mixer.init()
+pg.mixer.music.load("Sound\BG.mp3")
+pg.mixer.music.play(-1)
+pg.mixer.music.set_volume(0.5)
+
 screen = pg.display.set_mode((1300, 800))
 pg.display.set_caption("Chorus")
 timer = pg.time.Clock()
+
 bg = GameSprite("floor.jpg", 1300, 800, 0, 0)
 player = Player("player.png", 100, 100, 450, 700)
 End = GameSprite("finish.png", 100, 100, 1100, 700)
+DIE = GameSprite("DIE.jpg", 1300, 800, 0, 0)
 wall_picture = 'wall.jpg'
 skrimer = GameSprite("skrimer.jpg", 1300, 800, 0, 0)
 win = GameSprite("win.jpg", 1300, 800, 0, 0)
@@ -99,6 +155,11 @@ walls = [GameSprite(wall_picture, 30, 700, 600, 600),
     GameSprite(wall_picture, 400, 30, 900, 425)
    # GameSprite(wall_picture, 500, 50, 0, 200)
 ]
+
+sd_win = pg.mixer.Sound("Sound\win.wav")
+sd_skrimer = pg.mixer.Sound("Sound\skrim.wav")
+sd_die = pg.mixer.Sound("Sound\die.wav")
+
 barries = pg.sprite.Group()
 for wall in walls:
     barries.add(wall)
@@ -109,6 +170,7 @@ play = True
 x_change = 0
 y_change = 0
 finish = False
+die = False
 
 def check_collide():
     global finish
@@ -136,22 +198,10 @@ while play:
 
     End.ris()
     player.ris()
-    if finish:
-        if random.random() > 0.7:
-            kon = skrimer
-        else:
-            kon = win
-        while finish:
-            kon.ris()
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    finish = False
-                    play = False
-                if event.type == pg.KEYDOWN:
-                    if event.key == pg.K_SPACE:
-                        finish = False
-            pg.display.flip()
-        player = Player("player.png", 100, 100, 450, 700)
+
+    check_finish()
+    check_die()
+
     for enemy in enemys:
         enemy.ris()
         enemy.update()
