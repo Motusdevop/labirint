@@ -1,7 +1,7 @@
 # Разработай свою игру в этом файле!
 import pygame as pg
-import time
 import random
+
 def restart():
     global player
     global enemys
@@ -192,7 +192,8 @@ pg.mixer.music.play(-1)
 pg.mixer.music.set_volume(0.5)
 
 screen = pg.display.set_mode((1300, 800))
-pg.display.set_caption("Chorus")
+pg.display.set_caption("Chebubeli")
+pg.display.set_icon(pg.image.load("bullet.png"))
 timer = pg.time.Clock()
 
 bg = GameSprite("floor.jpg", 1300, 800, 0, 0)
@@ -206,7 +207,8 @@ enemys = [
     Enemy("enemy.png", 100, 100, 700, 660, 5, (1100, 730)),
     Enemy("enemy.png", 150, 150, 100, 20, 2, (1200, 25)),
     Enemy("enemy.png", 100, 100, 40, 450, 7, (230, 500)),
-    Enemy("enemy.png", 100, 100, 520, 300, 5, (530, 500))
+    Enemy("enemy.png", 100, 100, 520, 300, 5, (530, 500)),
+    Enemy("enemy.png", 100, 100, 900, 200, 7, (1100, 300))
 ]
 monsters = pg.sprite.Group()
 for enemy in enemys:
@@ -258,24 +260,19 @@ while play:
     player.update()
     timer.tick(FPS)
     bg.ris()
-    check_collide()
-
     barries.draw(screen)
-
     End.ris()
     player.ris()
     bullets.update()
     bullets.draw(screen)
-    pg.sprite.groupcollide(bullets, barries, True, False)
-    pg.sprite.groupcollide(bullets, monsters, True, True)
-
-    check_finish()
-    check_die()
-
     monsters.update()
     monsters.draw(screen)
 
-
+    check_collide()
+    pg.sprite.groupcollide(bullets, barries, True, False)
+    pg.sprite.groupcollide(bullets, monsters, True, True)
+    check_finish()
+    check_die()
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
