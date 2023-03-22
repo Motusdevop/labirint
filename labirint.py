@@ -187,28 +187,28 @@ class bullet2(pg.sprite.Sprite):
 pg.init()
 
 pg.mixer.init()
-pg.mixer.music.load("Sound\BG.mp3")
+pg.mixer.music.load("Source/Sound/BG.mp3")
 pg.mixer.music.play(-1)
 pg.mixer.music.set_volume(0.5)
 
 screen = pg.display.set_mode((1300, 800))
 pg.display.set_caption("Chebubeli")
-pg.display.set_icon(pg.image.load("bullet.png"))
+pg.display.set_icon(pg.image.load("Source/image/bullet.png"))
 timer = pg.time.Clock()
 
-bg = GameSprite("floor.jpg", 1300, 800, 0, 0)
-player = Player("player.png", 100, 100, 450, 700)
-End = GameSprite("finish.png", 100, 100, 1100, 700)
-DIE = GameSprite("DIE.jpg", 1300, 800, 0, 0)
-wall_picture = 'wall.jpg'
-skrimer = GameSprite("skrimer.jpg", 1300, 800, 0, 0)
-win = GameSprite("win.jpg", 1300, 800, 0, 0)
+bg = GameSprite("Source/image/floor.jpg", 1300, 800, 0, 0)
+player = Player("Source/image/player.png", 100, 100, 450, 700)
+End = GameSprite("Source/image/finish.png", 100, 100, 1100, 700)
+DIE = GameSprite("Source/image/DIE.jpg", 1300, 800, 0, 0)
+wall_picture = 'Source/image/wall.jpg'
+skrimer = GameSprite("Source/image/skrimer.jpg", 1300, 800, 0, 0)
+win = GameSprite("Source/image/win.jpg", 1300, 800, 0, 0)
 enemys = [
-    Enemy("enemy.png", 100, 100, 700, 660, 5, (1100, 730)),
-    Enemy("enemy.png", 150, 150, 100, 20, 2, (1200, 25)),
-    Enemy("enemy.png", 100, 100, 40, 450, 7, (230, 500)),
-    Enemy("enemy.png", 100, 100, 520, 300, 5, (530, 500)),
-    Enemy("enemy.png", 100, 100, 900, 200, 7, (1100, 300))
+    Enemy("Source/image/enemy.png", 100, 100, 700, 660, 5, (1100, 730)),
+    Enemy("Source/image/enemy.png", 150, 150, 100, 20, 2, (1200, 25)),
+    Enemy("Source/image/enemy.png", 100, 100, 40, 450, 7, (230, 500)),
+    Enemy("Source/image/enemy.png", 100, 100, 520, 300, 5, (530, 500)),
+    Enemy("Source/image/enemy.png", 100, 100, 900, 200, 7, (1100, 300))
 ]
 monsters = pg.sprite.Group()
 for enemy in enemys:
@@ -222,10 +222,10 @@ walls = [GameSprite(wall_picture, 30, 700, 600, 600),
     GameSprite(wall_picture, 230, 30, 1070, 625)
 ]
 
-sd_win = pg.mixer.Sound("Sound\win.wav")
-sd_skrimer = pg.mixer.Sound("Sound\skrim.wav")
-sd_die = pg.mixer.Sound("Sound\die.wav")
-sd_fire = pg.mixer.Sound("Sound/fire.wav")
+sd_win = pg.mixer.Sound("Source/Sound\win.wav")
+sd_skrimer = pg.mixer.Sound("Source/Sound\skrim.wav")
+sd_die = pg.mixer.Sound("Source/Sound\die.wav")
+sd_fire = pg.mixer.Sound("Source/Sound/fire.wav")
 
 barries = pg.sprite.Group()
 for wall in walls:
